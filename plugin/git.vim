@@ -125,12 +125,15 @@ endfunction
 " Commit.
 function! GitCommit(args)
     let git_dir = <SID>GetGitDir()
-
+    
     let args = a:args
 
     if args !~ '\v\k@<!(-a|--all)>' && s:SystemGit('diff --cached --stat') =~ '^\(\s\|\n\)*$'
         let args .= ' -a'
     endif
+
+    " Save current buffer so Git sees your changes
+    execute (":w")
 
     " Create COMMIT_EDITMSG file
     let editor_save = $EDITOR
